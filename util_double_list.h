@@ -108,9 +108,8 @@ static inline void list_delinit(struct list_head *item)
     ((__list)->next == (__list))
 
 #ifndef container_of
-#define container_of(ptr, sample, member)				\
-    (void *)((char *)(ptr)						\
-	     - ((char *)&((__typeof__(sample))0)->member))
+#define container_of(ptr, sample, member) \
+    (void *)((char *)(ptr) - offsetof(__typeof__(*(sample)), member))
 #endif
 
 #define LIST_FOR_EACH_ENTRY(pos, head, member)				\
