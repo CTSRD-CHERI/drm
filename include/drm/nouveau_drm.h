@@ -131,7 +131,7 @@ struct drm_nouveau_gem_pushbuf_bo_presumed {
 };
 
 struct drm_nouveau_gem_pushbuf_bo {
-	__u64 user_priv;
+	drm_uptr_t user_priv;
 	__u32 handle;
 	__u32 read_domains;
 	__u32 write_domains;

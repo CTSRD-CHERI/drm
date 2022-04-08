@@ -126,7 +126,7 @@ pushbuf_kref_fits(struct nouveau_pushbuf *push, struct nouveau_bo *bo,
 		if (!(kref->valid_domains & NOUVEAU_GEM_DOMAIN_GART))
 			continue;
 
-		kbo = (void *)(unsigned long)kref->user_priv;
+		kbo = (void *)(uintptr_t)kref->user_priv;
 		if (!(kref->valid_domains & NOUVEAU_GEM_DOMAIN_VRAM) ||
 		    krec->vram_used + kbo->size > dev->vram_limit)
 			continue;
@@ -292,7 +292,7 @@ pushbuf_dump(struct nouveau_pushbuf_krec *krec, int krec_id, int chid)
 	kpsh = krec->push;
 	for (i = 0; i < krec->nr_push; i++, kpsh++) {
 		kref = krec->buffer + kpsh->bo_index;
-		bo = (void *)(unsigned long)kref->user_priv;
+		bo = (void *)(uintptr_t)kref->user_priv;
 		bgn = (uint32_t *)((char *)bo->map + kpsh->offset);
 		end = bgn + ((kpsh->length & 0x7fffff) /4);
 
@@ -370,7 +370,7 @@ pushbuf_submit(struct nouveau_pushbuf *push, struct nouveau_object *chan)
 
 		kref = krec->buffer;
 		for (i = 0; i < krec->nr_buffer; i++, kref++) {
-			bo = (void *)(unsigned long)kref->user_priv;
+			bo = (void *)(uintptr_t)kref->user_priv;
 
 			info = &kref->presumed;
 			if (!info->valid) {
@@ -414,7 +414,7 @@ pushbuf_flush(struct nouveau_pushbuf *push)
 
 	kref = krec->buffer;
 	for (i = 0; i < krec->nr_buffer; i++, kref++) {
-		bo = (void *)(unsigned long)kref->user_priv;
+		bo = (void *)(uintptr_t)kref->user_priv;
 		cli_kref_set(push->client, bo, NULL, NULL);
 		if (push->channel)
 			nouveau_bo_ref(NULL, &bo);
@@ -445,7 +445,7 @@ pushbuf_refn_fail(struct nouveau_pushbuf *push, int sref, int srel)
 
 	kref = krec->buffer + sref;
 	while (krec->nr_buffer-- > sref) {
-		struct nouveau_bo *bo = (void *)(unsigned long)kref->user_priv;
+		struct nouveau_bo *bo = (void *)(uintptr_t)kref->user_priv;
 		cli_kref_set(push->client, bo, NULL, NULL);
 		nouveau_bo_ref(NULL, &bo);
 		kref++;
@@ -616,7 +616,7 @@ nouveau_pushbuf_del(struct nouveau_pushbuf **ppush)
 		while ((krec = nvpb->list)) {
 			kref = krec->buffer;
 			while (krec->nr_buffer--) {
-				unsigned long priv = kref++->user_priv;
+				drm_uptr_t priv = kref++->user_priv;
 				struct nouveau_bo *bo = (void *)priv;
 				cli_kref_set(nvpb->base.client, bo, NULL, NULL);
 				nouveau_bo_ref(NULL, &bo);

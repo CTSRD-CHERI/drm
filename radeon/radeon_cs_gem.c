@@ -424,7 +424,7 @@ out_err:
 static int cs_gem_emit(struct radeon_cs_int *cs)
 {
     struct cs_gem *csg = (struct cs_gem*)cs;
-    uint64_t chunk_array[2];
+    drm_uptr_t chunk_array[2];
     unsigned i;
     int r;
 

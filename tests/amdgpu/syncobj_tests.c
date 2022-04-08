@@ -204,7 +204,7 @@ static void *syncobj_wait(void *data)
 					      sp->point);
 	CU_ASSERT_EQUAL(r, 0);
 
-	return (void *)(long)r;
+	return (void *)(intptr_t)r;
 }
 
 static void *syncobj_signal(void *data)
@@ -216,7 +216,7 @@ static void *syncobj_signal(void *data)
 					      sp->point);
 	CU_ASSERT_EQUAL(r, 0);
 
-	return (void *)(long)r;
+	return (void *)(intptr_t)r;
 }
 
 static void amdgpu_syncobj_timeline_test(void)

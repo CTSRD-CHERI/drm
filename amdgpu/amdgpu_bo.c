@@ -558,7 +558,7 @@ drm_public int amdgpu_find_bo_by_cpu_mapping(amdgpu_device_handle dev,
 	if (i < dev->bo_handles.max_key) {
 		atomic_inc(&bo->refcount);
 		*buf_handle = bo;
-		*offset_in_bo = (uintptr_t)cpu - (uintptr_t)bo->cpu_ptr;
+		*offset_in_bo = (char*)cpu - (char*)bo->cpu_ptr;
 	} else {
 		*buf_handle = NULL;
 		*offset_in_bo = 0;
@@ -609,7 +609,7 @@ drm_public int amdgpu_bo_list_create_raw(amdgpu_device_handle dev,
 	args.in.operation = AMDGPU_BO_LIST_OP_CREATE;
 	args.in.bo_number = number_of_buffers;
 	args.in.bo_info_size = sizeof(struct drm_amdgpu_bo_list_entry);
-	args.in.bo_info_ptr = (drm_uptr_t)(uintptr_t)buffers;
+	args.in.bo_info_ptr = (uintptr_t)buffers;
 
 	r = drmCommandWriteRead(dev->fd, DRM_AMDGPU_BO_LIST,
 				&args, sizeof(args));
@@ -663,7 +663,7 @@ drm_public int amdgpu_bo_list_create(amdgpu_device_handle dev,
 	args.in.operation = AMDGPU_BO_LIST_OP_CREATE;
 	args.in.bo_number = number_of_resources;
 	args.in.bo_info_size = sizeof(struct drm_amdgpu_bo_list_entry);
-	args.in.bo_info_ptr = (drm_uptr_t)(uintptr_t)list;
+	args.in.bo_info_ptr = (uintptr_t)list;
 
 	for (i = 0; i < number_of_resources; i++) {
 		list[i].bo_handle = resources[i]->handle;

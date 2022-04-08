@@ -882,13 +882,13 @@ drm_public int amdgpu_cs_submit_raw(amdgpu_device_handle dev,
 				    uint64_t *seq_no)
 {
 	union drm_amdgpu_cs cs;
-	uint64_t *chunk_array;
+	drm_uptr_t *chunk_array;
 	int i, r;
 	if (num_chunks == 0)
 		return -EINVAL;
 
 	memset(&cs, 0, sizeof(cs));
-	chunk_array = alloca(sizeof(uint64_t) * num_chunks);
+	chunk_array = alloca(sizeof(*chunk_array) * num_chunks);
 	for (i = 0; i < num_chunks; i++)
 		chunk_array[i] = (drm_uptr_t)(uintptr_t)&chunks[i];
 	cs.in.chunks = (drm_uptr_t)(uintptr_t)chunk_array;
@@ -913,11 +913,11 @@ drm_public int amdgpu_cs_submit_raw2(amdgpu_device_handle dev,
 				     uint64_t *seq_no)
 {
 	union drm_amdgpu_cs cs;
-	uint64_t *chunk_array;
+	drm_uptr_t *chunk_array;
 	int i, r;
 
 	memset(&cs, 0, sizeof(cs));
-	chunk_array = alloca(sizeof(uint64_t) * num_chunks);
+	chunk_array = alloca(sizeof(*chunk_array) * num_chunks);
 	for (i = 0; i < num_chunks; i++)
 		chunk_array[i] = (drm_uptr_t)(uintptr_t)&chunks[i];
 	cs.in.chunks = (drm_uptr_t)(uintptr_t)chunk_array;
