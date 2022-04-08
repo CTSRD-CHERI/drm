@@ -40,6 +40,7 @@
 #include <linux/types.h>
 #include <asm/ioctl.h>
 typedef unsigned int drm_handle_t;
+typedef __u64 drm_uptr_t;
 
 #else /* One of the BSDs */
 
@@ -55,6 +56,15 @@ typedef uint32_t __u32;
 typedef int64_t  __s64;
 typedef uint64_t __u64;
 typedef size_t   __kernel_size_t;
+/*
+ * When targeting pure-capability kernels we must pass capabilities, but for
+ * non-purecap we use u64 to avoid the need for 32-bit compat code
+ */
+#ifdef __CHERI_PURE_CAPABILITY__
+typedef uintcap_t drm_uptr_t;
+#else
+typedef uint64_t drm_uptr_t;
+#endif
 typedef unsigned long drm_handle_t;
 
 #endif
@@ -882,7 +892,7 @@ struct drm_syncobj_transfer {
 #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT (1 << 1)
 #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE (1 << 2) /* wait for time point to become available */
 struct drm_syncobj_wait {
-	__u64 handles;
+	drm_uptr_t handles;
 	/* absolute timeout */
 	__s64 timeout_nsec;
 	__u32 count_handles;
@@ -892,9 +902,9 @@ struct drm_syncobj_wait {
 };
 
 struct drm_syncobj_timeline_wait {
-	__u64 handles;
+	drm_uptr_t handles;
 	/* wait on specific timeline point for every handles*/
-	__u64 points;
+	drm_uptr_t points;
 	/* absolute timeout */
 	__s64 timeout_nsec;
 	__u32 count_handles;
@@ -905,15 +915,15 @@ struct drm_syncobj_timeline_wait {
 
 
 struct drm_syncobj_array {
-	__u64 handles;
+	drm_uptr_t handles;
 	__u32 count_handles;
 	__u32 pad;
 };
 
 #define DRM_SYNCOBJ_QUERY_FLAGS_LAST_SUBMITTED (1 << 0) /* last available point on timeline syncobj */
 struct drm_syncobj_timeline_array {
-	__u64 handles;
-	__u64 points;
+	drm_uptr_t handles;
+	drm_uptr_t points;
 	__u32 count_handles;
 	__u32 flags;
 };
@@ -938,7 +948,7 @@ struct drm_crtc_queue_sequence {
 	__u32 crtc_id;
 	__u32 flags;
 	__u64 sequence;		/* on input, target sequence. on output, actual sequence */
-	__u64 user_data;	/* user data passed to event */
+	drm_uptr_t user_data;	/* user data passed to event */
 };
 
 #if defined(__cplusplus)
@@ -1116,7 +1126,7 @@ struct drm_event {
 
 struct drm_event_vblank {
 	struct drm_event base;
-	__u64 user_data;
+	drm_uptr_t user_data;
 	__u32 tv_sec;
 	__u32 tv_usec;
 	__u32 sequence;
@@ -1128,7 +1138,7 @@ struct drm_event_vblank {
  */
 struct drm_event_crtc_sequence {
 	struct drm_event	base;
-	__u64			user_data;
+	drm_uptr_t			user_data;
 	__s64			time_ns;
 	__u64			sequence;
 };

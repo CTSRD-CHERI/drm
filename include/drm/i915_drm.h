@@ -2579,7 +2579,7 @@ struct drm_i915_gem_userptr {
 	 *
 	 * Needs to be aligned to PAGE_SIZE.
 	 */
-	__u64 user_ptr;
+	drm_uptr_t user_ptr;
 
 	/**
 	 * @user_size:

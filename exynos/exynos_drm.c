@@ -39,7 +39,12 @@
 #include "exynos_drm.h"
 #include "exynos_drmif.h"
 
-#define U642VOID(x) ((void *)(unsigned long)(x))
+#ifdef __CHERI_PURE_CAPABILITY__
+/* No casts for CHERI to ensure that drm_uptr_t is used in the structures. */
+#define U642VOID(x) ((void *)(x))
+#else
+#define U642VOID(x) ((void *)(uintptr_t)(x))
+#endif
 
 /*
  * Create exynos drm device object.
@@ -356,7 +361,7 @@ exynos_vidi_connection(struct exynos_device *dev, uint32_t connect,
 	struct drm_exynos_vidi_connection req = {
 		.connection	= connect,
 		.extensions	= ext,
-		.edid		= (uint64_t)(uintptr_t)edid,
+		.edid		= (drm_uptr_t)(uintptr_t)edid,
 	};
 	int ret;
 

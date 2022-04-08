@@ -193,8 +193,13 @@ drm_private struct fd_bo *fd_bo_new_ring(struct fd_device *dev,
 		do { drmMsg("[E] " fmt " (%s:%d)\n", \
 				##__VA_ARGS__, __FUNCTION__, __LINE__); } while (0)
 
-#define U642VOID(x) ((void *)(unsigned long)(x))
-#define VOID2U64(x) ((uint64_t)(unsigned long)(x))
+#ifdef __CHERI_PURE_CAPABILITY__
+/* No casts for CHERI to ensure that drm_uptr_t is used in the structures. */
+#define U642VOID(x) ((void *)(x))
+#else
+#define U642VOID(x) ((void *)(uintptr_t)(x))
+#endif
+#define VOID2U64(x) ((drm_uptr_t)(uintptr_t)(x))
 
 static inline uint32_t
 offset_bytes(void *end, void *start)

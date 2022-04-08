@@ -137,7 +137,7 @@ static int syncobj_command_submission_helper(uint32_t syncobj_handle, bool
 
 	chunks[0].chunk_id = AMDGPU_CHUNK_ID_IB;
 	chunks[0].length_dw = sizeof(struct drm_amdgpu_cs_chunk_ib) / 4;
-	chunks[0].chunk_data = (uint64_t)(uintptr_t)&chunk_data;
+	chunks[0].chunk_data = (drm_uptr_t)(uintptr_t)&chunk_data;
 	chunk_data.ib_data._pad = 0;
 	chunk_data.ib_data.va_start = ib_result_mc_address;
 	chunk_data.ib_data.ib_bytes = 16 * 4;
@@ -151,7 +151,7 @@ static int syncobj_command_submission_helper(uint32_t syncobj_handle, bool
 		AMDGPU_CHUNK_ID_SYNCOBJ_TIMELINE_WAIT :
 		AMDGPU_CHUNK_ID_SYNCOBJ_TIMELINE_SIGNAL;
 	chunks[1].length_dw = sizeof(struct drm_amdgpu_cs_chunk_syncobj) / 4;
-	chunks[1].chunk_data = (uint64_t)(uintptr_t)&syncobj_data;
+	chunks[1].chunk_data = (drm_uptr_t)(uintptr_t)&syncobj_data;
 	syncobj_data.handle = syncobj_handle;
 	syncobj_data.point = point;
 	syncobj_data.flags = DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT;

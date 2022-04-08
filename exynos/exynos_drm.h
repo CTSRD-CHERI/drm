@@ -124,7 +124,7 @@ struct drm_exynos_g2d_set_cmdlist {
 
 	/* for g2d event */
 	__u64					event_type;
-	__u64					user_data;
+	drm_uptr_t				user_data;
 };
 
 struct drm_exynos_g2d_exec {
@@ -162,7 +162,7 @@ struct drm_exynos_g2d_exec {
 
 struct drm_exynos_g2d_event {
 	struct drm_event	base;
-	__u64				user_data;
+	drm_uptr_t			user_data;
 	__u32				tv_sec;
 	__u32				tv_usec;
 	__u32				cmdlist_no;

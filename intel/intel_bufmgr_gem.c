@@ -916,7 +916,7 @@ drm_intel_gem_bo_alloc_userptr(drm_intel_bufmgr *bufmgr,
 	bo_gem->bo.size = size;
 
 	memclear(userptr);
-	userptr.user_ptr = (__u64)((unsigned long)addr);
+	userptr.user_ptr = (drm_uptr_t)(uintptr_t)addr;
 	userptr.user_size = size;
 	userptr.flags = flags;
 
@@ -985,7 +985,7 @@ has_userptr(drm_intel_bufmgr_gem *bufmgr_gem)
 	}
 
 	memclear(userptr);
-	userptr.user_ptr = (__u64)(unsigned long)ptr;
+	userptr.user_ptr = (drm_uptr_t)(uintptr_t)ptr;
 	userptr.user_size = pgsz;
 
 retry:

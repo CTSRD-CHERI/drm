@@ -711,7 +711,7 @@ struct drm_vmw_fence_arg {
 
 struct drm_vmw_event_fence {
 	struct drm_event base;
-	__u64 user_data;
+	drm_uptr_t user_data;
 	__u32 tv_sec;
 	__u32 tv_usec;
 };
@@ -733,7 +733,7 @@ struct drm_vmw_event_fence {
  */
 struct drm_vmw_fence_event_arg {
 	__u64 fence_rep;
-	__u64 user_data;
+	drm_uptr_t user_data;
 	__u32 handle;
 	__u32 flags;
 };

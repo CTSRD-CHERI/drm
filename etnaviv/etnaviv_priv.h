@@ -194,7 +194,7 @@ struct etna_perfmon_signal
 		do { drmMsg("[E] " fmt " (%s:%d)\n", \
 				##__VA_ARGS__, __FUNCTION__, __LINE__); } while (0)
 
-#define VOID2U64(x) ((uint64_t)(unsigned long)(x))
+#define VOID2U64(x) ((drm_uptr_t)(uintptr_t)(x))
 
 static inline void get_abs_timeout(struct drm_etnaviv_timespec *tv, uint64_t ns)
 {

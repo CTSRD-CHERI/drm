@@ -800,7 +800,7 @@ typedef struct _drmEventContext {
 	void (*sequence_handler)(int fd,
 				 uint64_t sequence,
 				 uint64_t ns,
-				 uint64_t user_data);
+				 drm_uptr_t user_data);
 } drmEventContext, *drmEventContextPtr;
 
 extern int drmHandleEvent(int fd, drmEventContextPtr evctx);

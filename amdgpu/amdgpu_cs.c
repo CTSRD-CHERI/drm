@@ -280,7 +280,7 @@ static int amdgpu_cs_submit_one(amdgpu_context_handle context,
 		struct amdgpu_cs_ib_info *ib;
 		chunks[i].chunk_id = AMDGPU_CHUNK_ID_IB;
 		chunks[i].length_dw = sizeof(struct drm_amdgpu_cs_chunk_ib) / 4;
-		chunks[i].chunk_data = (uint64_t)(uintptr_t)&chunk_data[i];
+		chunks[i].chunk_data = (drm_uptr_t)(uintptr_t)&chunk_data[i];
 
 		ib = &ibs_request->ibs[i];
 
@@ -301,7 +301,7 @@ static int amdgpu_cs_submit_one(amdgpu_context_handle context,
 		/* fence chunk */
 		chunks[i].chunk_id = AMDGPU_CHUNK_ID_FENCE;
 		chunks[i].length_dw = sizeof(struct drm_amdgpu_cs_chunk_fence) / 4;
-		chunks[i].chunk_data = (uint64_t)(uintptr_t)&chunk_data[i];
+		chunks[i].chunk_data = (drm_uptr_t)(uintptr_t)&chunk_data[i];
 
 		/* fence bo handle */
 		chunk_data[i].fence_data.handle = ibs_request->fence_info.handle->handle;
@@ -334,7 +334,7 @@ static int amdgpu_cs_submit_one(amdgpu_context_handle context,
 		chunks[i].chunk_id = AMDGPU_CHUNK_ID_DEPENDENCIES;
 		chunks[i].length_dw = sizeof(struct drm_amdgpu_cs_chunk_dep) / 4
 			* ibs_request->number_of_dependencies;
-		chunks[i].chunk_data = (uint64_t)(uintptr_t)dependencies;
+		chunks[i].chunk_data = (drm_uptr_t)(uintptr_t)dependencies;
 	}
 
 	sem_list = &context->sem_list[ibs_request->ip_type][ibs_request->ip_instance][ibs_request->ring];
@@ -365,7 +365,7 @@ static int amdgpu_cs_submit_one(amdgpu_context_handle context,
 		/* dependencies chunk */
 		chunks[i].chunk_id = AMDGPU_CHUNK_ID_DEPENDENCIES;
 		chunks[i].length_dw = sizeof(struct drm_amdgpu_cs_chunk_dep) / 4 * sem_count;
-		chunks[i].chunk_data = (uint64_t)(uintptr_t)sem_dependencies;
+		chunks[i].chunk_data = (drm_uptr_t)(uintptr_t)sem_dependencies;
 	}
 
 	r = amdgpu_cs_submit_raw2(dev, context, bo_list_handle, num_chunks,
@@ -518,7 +518,7 @@ static int amdgpu_ioctl_wait_fences(struct amdgpu_cs_fence *fences,
 	}
 
 	memset(&args, 0, sizeof(args));
-	args.in.fences = (uint64_t)(uintptr_t)drm_fences;
+	args.in.fences = (drm_uptr_t)(uintptr_t)drm_fences;
 	args.in.fence_count = fence_count;
 	args.in.wait_all = wait_all;
 	args.in.timeout_ns = amdgpu_cs_calculate_timeout(timeout_ns);
@@ -890,8 +890,8 @@ drm_public int amdgpu_cs_submit_raw(amdgpu_device_handle dev,
 	memset(&cs, 0, sizeof(cs));
 	chunk_array = alloca(sizeof(uint64_t) * num_chunks);
 	for (i = 0; i < num_chunks; i++)
-		chunk_array[i] = (uint64_t)(uintptr_t)&chunks[i];
-	cs.in.chunks = (uint64_t)(uintptr_t)chunk_array;
+		chunk_array[i] = (drm_uptr_t)(uintptr_t)&chunks[i];
+	cs.in.chunks = (drm_uptr_t)(uintptr_t)chunk_array;
 	cs.in.ctx_id = context->id;
 	cs.in.bo_list_handle = bo_list_handle ? bo_list_handle->handle : 0;
 	cs.in.num_chunks = num_chunks;
@@ -919,8 +919,8 @@ drm_public int amdgpu_cs_submit_raw2(amdgpu_device_handle dev,
 	memset(&cs, 0, sizeof(cs));
 	chunk_array = alloca(sizeof(uint64_t) * num_chunks);
 	for (i = 0; i < num_chunks; i++)
-		chunk_array[i] = (uint64_t)(uintptr_t)&chunks[i];
-	cs.in.chunks = (uint64_t)(uintptr_t)chunk_array;
+		chunk_array[i] = (drm_uptr_t)(uintptr_t)&chunks[i];
+	cs.in.chunks = (drm_uptr_t)(uintptr_t)chunk_array;
 	cs.in.ctx_id = context->id;
 	cs.in.bo_list_handle = bo_list_handle;
 	cs.in.num_chunks = num_chunks;

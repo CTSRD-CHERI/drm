@@ -59,8 +59,13 @@
 
 #define memclear(s) memset(&s, 0, sizeof(s))
 
-#define U642VOID(x) ((void *)(unsigned long)(x))
-#define VOID2U64(x) ((uint64_t)(unsigned long)(x))
+#ifdef __CHERI_PURE_CAPABILITY__
+/* No casts for CHERI to ensure that drm_uptr_t is used in the structures. */
+#define U642VOID(x) ((void *)(x))
+#else
+#define U642VOID(x) ((void *)(uintptr_t)(x))
+#endif
+#define VOID2U64(x) ((drm_uptr_t)(uintptr_t)(x))
 
 static inline int DRM_IOCTL(int fd, unsigned long cmd, void *arg)
 {

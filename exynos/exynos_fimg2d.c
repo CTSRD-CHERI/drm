@@ -323,14 +323,14 @@ static int g2d_flush(struct g2d_context *ctx)
 		return -EINVAL;
 	}
 
-	cmdlist.cmd = (uint64_t)(uintptr_t)&ctx->cmd[0];
-	cmdlist.cmd_buf = (uint64_t)(uintptr_t)&ctx->cmd_buf[0];
+	cmdlist.cmd = (drm_uptr_t)(uintptr_t)&ctx->cmd[0];
+	cmdlist.cmd_buf = (drm_uptr_t)(uintptr_t)&ctx->cmd_buf[0];
 	cmdlist.cmd_nr = ctx->cmd_nr;
 	cmdlist.cmd_buf_nr = ctx->cmd_buf_nr;
 
 	if (ctx->event_userdata) {
 		cmdlist.event_type = G2D_EVENT_NONSTOP;
-		cmdlist.user_data = (uint64_t)(uintptr_t)(ctx->event_userdata);
+		cmdlist.user_data = (drm_uptr_t)(uintptr_t)(ctx->event_userdata);
 		ctx->event_userdata = NULL;
 	} else {
 		cmdlist.event_type = G2D_EVENT_NOT;
