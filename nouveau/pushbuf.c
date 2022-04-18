@@ -333,11 +333,11 @@ pushbuf_submit(struct nouveau_pushbuf *push, struct nouveau_object *chan)
 	while (krec && krec->nr_push) {
 		req.channel = fifo->channel;
 		req.nr_buffers = krec->nr_buffer;
-		req.buffers = (uint64_t)(unsigned long)krec->buffer;
+		req.buffers = (drm_uptr_t)(uintptr_t)krec->buffer;
 		req.nr_relocs = krec->nr_reloc;
 		req.nr_push = krec->nr_push;
-		req.relocs = (uint64_t)(unsigned long)krec->reloc;
-		req.push = (uint64_t)(unsigned long)krec->push;
+		req.relocs = (drm_uptr_t)(uintptr_t)krec->reloc;
+		req.push = (drm_uptr_t)(uintptr_t)krec->push;
 		req.suffix0 = nvpb->suffix0;
 		req.suffix1 = nvpb->suffix1;
 		req.vram_available = 0; /* for valgrind */

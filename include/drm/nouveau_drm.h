@@ -164,11 +164,11 @@ struct drm_nouveau_gem_pushbuf_push {
 struct drm_nouveau_gem_pushbuf {
 	__u32 channel;
 	__u32 nr_buffers;
-	__u64 buffers;
+	drm_uptr_t buffers;
 	__u32 nr_relocs;
 	__u32 nr_push;
-	__u64 relocs;
-	__u64 push;
+	drm_uptr_t relocs;
+	drm_uptr_t push;
 	__u32 suffix0;
 	__u32 suffix1;
 #define NOUVEAU_GEM_PUSHBUF_SYNC                                    (1ULL << 0)

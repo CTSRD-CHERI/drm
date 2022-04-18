@@ -276,7 +276,7 @@ static int get_cmd(struct fd_ringbuffer *ring, struct msm_cmd *target_cmd,
 	if (target_cmd->is_appended_to_submit &&
 			!(target_cmd->ring->flags & FD_RINGBUFFER_STREAMING) &&
 			!drmHashLookup(msm_ring->cmd_table, (unsigned long)target_cmd, &val)) {
-		i = VOID2U64(val);
+		i = (uint32_t)VOID2U64(val);
 		cmd = &msm_ring->submit.cmds[i];
 
 		assert(cmd->submit_offset == submit_offset);
@@ -303,7 +303,7 @@ static int get_cmd(struct fd_ringbuffer *ring, struct msm_cmd *target_cmd,
 
 	if (!(target_cmd->ring->flags & FD_RINGBUFFER_STREAMING)) {
 		drmHashInsert(msm_ring->cmd_table, (unsigned long)target_cmd,
-				U642VOID(i));
+				U642VOID((uintptr_t)i));
 	}
 
 	target_cmd->size = size;
